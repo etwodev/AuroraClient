@@ -1,0 +1,83 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+
+  <!-- General Project Properties -->
+  <PropertyGroup>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+		<Platforms>x64</Platforms>
+		<Nullable>enable</Nullable>
+		<LangVersion>preview</LangVersion>
+		<ProduceReferenceAssembly>false</ProduceReferenceAssembly>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <GenerateBindingRedirectsOutputType>true</GenerateBindingRedirectsOutputType>
+		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+		<CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+  </PropertyGroup>
+
+  <!-- Debug Build Properties -->
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+
+  <!-- Release Build Properties -->
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+
+  <!-- Package References -->
+  <ItemGroup>
+		<PackageReference Include="DalamudPackager" Version="2.1.13" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="8.0.0" />
+		<PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="8.0.0" />
+  </ItemGroup>
+
+  <!-- Plugin DLLs -->
+  <ItemGroup>
+    <Reference Include="FFXIVClientStructs">
+      <HintPath Condition="Exists('..\Dalamud\bin\Debug')">..\Dalamud\bin\Debug\FFXIVClientStructs.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+		<Reference Include="InteropGenerator.Runtime">
+      <HintPath Condition="Exists('..\Dalamud\bin\Debug')">..\Dalamud\bin\Debug\InteropGenerator.Runtime.dll</HintPath>
+			<Private>false</Private>
+		</Reference>
+    <Reference Include="Dalamud">
+      <HintPath Condition="Exists('..\Dalamud\bin\Debug')">..\Dalamud\bin\Debug\Dalamud.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+		<Reference Include="Lumina">
+      <HintPath Condition="Exists('..\Dalamud\bin\Debug')">..\Dalamud\bin\Debug\Lumina.dll</HintPath>
+			<Private>false</Private>
+		</Reference>
+		<Reference Include="Lumina.Excel">
+      <HintPath Condition="Exists('..\Dalamud\bin\Debug')">..\Dalamud\bin\Debug\Lumina.Excel.dll</HintPath>
+			<Private>false</Private>
+		</Reference>
+    <Reference Include="ImGui.NET">
+      <HintPath Condition="Exists('..\Dalamud\bin\Debug')">..\Dalamud\bin\Debug\ImGui.NET.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="ImGuiScene">
+      <HintPath Condition="Exists('..\Dalamud\bin\Debug')">..\Dalamud\bin\Debug\ImGuiScene.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="AuroraClient.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+</Project>

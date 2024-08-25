@@ -1,0 +1,17 @@
+{
+  "Author": "Etwodev",
+  "Name": "Aurora",
+  "Punchline": "TBC",
+  "Description": "TBC",
+  "InternalName": "Aurora",
+  "DalamudApiLevel": 10,
+  "RepoUrl": "https://github.com/etwodev/AuroraClient",
+  "Tags": [
+    "TBC"
+  ],
+  "CategoryTags": [
+    "TBC"
+  ],
+  "IconUrl": "https://raw.githubusercontent.com/Ottermandias/Glamourer/master/images/icon.png",
+  "ImageUrls": null
+}
