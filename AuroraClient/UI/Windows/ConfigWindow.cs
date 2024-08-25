@@ -9,14 +9,14 @@ internal class ConfigWindow : Window
 {
   private readonly ConfigurationService configService;
 
-  public ConfigWindow(ConfigurationService configService) : base($"{Plugin.Name} Config Window [{configService.Version}]{Constants.ConfigWindowCode}", ImGuiWindowFlags.NoScrollbar | ImGuiWindowFlags.AlwaysAutoResize)
+  public ConfigWindow(ConfigurationService configService) : base($"{Plugin.Name} Config Window [{configService.Version}]###{WindowCode.ConfigWindow}", ImGuiWindowFlags.NoScrollbar | ImGuiWindowFlags.AlwaysAutoResize)
   {
     this.configService = configService;
 
     SizeConstraints = new WindowSizeConstraints
     {
-      MaximumSize = new Vector2(270, 5000),
-      MinimumSize = new Vector2(270, 200)
+      MaximumSize = new Vector2(500, 5000),
+      MinimumSize = new Vector2(500, 200)
     };
 
     StateManager.Instance.AddWindow(this);

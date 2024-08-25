@@ -9,14 +9,14 @@ internal class MainWindow : Window
 {
   private readonly ConfigurationService configService;
 
-  public MainWindow(ConfigurationService configService) : base($"{Plugin.Name} Main Window [{configService.Version}]{Constants.MainWindowCode}", ImGuiWindowFlags.NoScrollbar | ImGuiWindowFlags.AlwaysAutoResize)
+  public MainWindow(ConfigurationService configService) : base($"{Plugin.Name} Main Window [{configService.Version}]###{WindowCode.MainWindow}", ImGuiWindowFlags.NoScrollbar | ImGuiWindowFlags.AlwaysAutoResize)
   {
     this.configService = configService;
 
     SizeConstraints = new WindowSizeConstraints
     {
-      MaximumSize = new Vector2(270, 5000),
-      MinimumSize = new Vector2(270, 200)
+      MaximumSize = new Vector2(500, 5000),
+      MinimumSize = new Vector2(500, 200)
     };
 
     StateManager.Instance.AddWindow(this);
@@ -28,7 +28,7 @@ internal class MainWindow : Window
 
     if (ImGui.Button("Show Boilerplate Settings"))
     {
-      StateManager.Instance.ToggleWindow(Constants.ConfigWindowCode);
+      StateManager.Instance.ToggleWindow(WindowCode.ConfigWindow);
     }
   }
 }

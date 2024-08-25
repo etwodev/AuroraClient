@@ -5,10 +5,6 @@ using Dalamud.Plugin;
 
 namespace Aurora.UI;
 
-public interface IIdentifiable
-{
-  public string WindowId { get; }
-}
 
 internal class StateManager : IDisposable
 {
@@ -26,37 +22,40 @@ internal class StateManager : IDisposable
     this.configurationService = configurationService;
 
     this.pluginInterface.UiBuilder.Draw += windowSystem.Draw;
-    this.pluginInterface.UiBuilder.OpenConfigUi += () => ShowWindow(Constants.ConfigWindowCode);
-    this.pluginInterface.UiBuilder.OpenMainUi += () => ShowWindow(Constants.MainWindowCode);
+    this.pluginInterface.UiBuilder.OpenConfigUi += ShowWindow(WindowCode.ConfigWindow);
+    this.pluginInterface.UiBuilder.OpenMainUi += ShowWindow(WindowCode.MainWindow);
   }
 
   public void Dispose()
   {
     pluginInterface.UiBuilder.Draw -= windowSystem.Draw;
-    pluginInterface.UiBuilder.OpenConfigUi -= () => ToggleWindow(Constants.ConfigWindowCode);
-    pluginInterface.UiBuilder.OpenMainUi -= () => ToggleWindow(Constants.MainWindowCode);
+    pluginInterface.UiBuilder.OpenConfigUi -= ShowWindow(WindowCode.ConfigWindow);
+    pluginInterface.UiBuilder.OpenMainUi -= ShowWindow(WindowCode.MainWindow);
 
     windowSystem.RemoveAllWindows();
 
     Instance = null!;
   }
 
-  public void ShowWindow(string id)
+  private Action ShowWindow(WindowCode id)
   {
-    foreach (var window in windowSystem.Windows)
+    return () =>
     {
-      if (window.WindowName.EndsWith(id))
+      foreach (var window in windowSystem.Windows)
       {
-        window.IsOpen = true;
+        if (window.WindowName.EndsWith(id.ToString()))
+        {
+          window.IsOpen = true;
+        }
       }
-    }
+    };
   }
 
-  public void ToggleWindow(string id)
+  public void ToggleWindow(WindowCode id)
   {
     foreach (var window in windowSystem.Windows)
     {
-      if (window.WindowName.EndsWith(id))
+      if (window.WindowName.EndsWith(id.ToString()))
       {
         window.Toggle();
       }
