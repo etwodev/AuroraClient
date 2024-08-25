@@ -10,16 +10,14 @@ internal class StateManager : IDisposable
 {
   public static StateManager Instance { get; private set; } = null!;
   private readonly IDalamudPluginInterface pluginInterface;
-  private readonly ConfigurationService configurationService;
 
   private readonly WindowSystem windowSystem = new(Plugin.Name);
 
-  public StateManager(IDalamudPluginInterface pluginInterface, ConfigurationService configurationService)
+  public StateManager(IDalamudPluginInterface pluginInterface)
   {
     if (Instance == null) Instance = this;
 
     this.pluginInterface = pluginInterface;
-    this.configurationService = configurationService;
 
     this.pluginInterface.UiBuilder.Draw += windowSystem.Draw;
     this.pluginInterface.UiBuilder.OpenConfigUi += ShowWindow(WindowCode.ConfigWindow);
