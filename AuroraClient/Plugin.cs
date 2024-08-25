@@ -25,38 +25,38 @@ namespace Aurora
       Log = dalamudServices.Log;
       Framework = dalamudServices.Framework;
 
+      var stopwatch = new Stopwatch();
+      stopwatch.Start();
 
-      dalamudServices.Framework.RunOnTick(() =>
+      Log.Info($"Starting {Name}...");
+
+      try { dalamudServices.Framework.RunOnTick(LoadServices(dalamudServices)); }
+      catch (Exception e)
       {
-        var stopwatch = new Stopwatch();
-        stopwatch.Start();
-        Log.Info($"Starting {Name}...");
+        Log.Error(e, $"Failed to start {Name} in {stopwatch.ElapsedMilliseconds}ms");
+        services?.Dispose();
+        throw;
+      }
 
-        try
-        {
-          // Setup plugin services
-          var serviceCollection = SetupServices(dalamudServices);
-          services = serviceCollection.BuildServiceProvider(new ServiceProviderOptions { ValidateOnBuild = true });
+      Log.Info($"Started {Name} in {stopwatch.ElapsedMilliseconds}ms");
+    }
 
-          // Initialize the singletons
-          foreach (var service in serviceCollection)
-          {
-            if (service.Lifetime == ServiceLifetime.Singleton)
-            {
-              Log.Debug($"Initializing {service.ServiceType}...");
-              services.GetRequiredService(service.ServiceType);
-            }
-          }
+    private static Action LoadServices(DalamudServices dalamudServices)
+    {
+      return () =>
+       {
+         var serviceCollection = SetupServices(dalamudServices);
+         services = serviceCollection.BuildServiceProvider(new ServiceProviderOptions { ValidateOnBuild = true });
 
-          Log.Info($"Started {Name} in {stopwatch.ElapsedMilliseconds}ms");
-        }
-        catch (Exception e)
-        {
-          Log.Error(e, $"Failed to start {Name} in {stopwatch.ElapsedMilliseconds}ms");
-          services?.Dispose();
-          throw;
-        }
-      }, delayTicks: 2);
+         foreach (var service in serviceCollection)
+         {
+           if (service.Lifetime == ServiceLifetime.Singleton)
+           {
+             Log.Debug($"Initializing {service.ServiceType}...");
+             services.GetRequiredService(service.ServiceType);
+           }
+         }
+       };
     }
 
     private static ServiceCollection SetupServices(DalamudServices dalamudServices)
