@@ -39,6 +39,7 @@
   <!-- Package References -->
   <ItemGroup>
 		<PackageReference Include="DalamudPackager" Version="2.1.13" />
+    <PackageReference Include="Microsoft.Extensions.Hosting" Version="8.0.0" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="8.0.0" />
 		<PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="8.0.0" />
   </ItemGroup>

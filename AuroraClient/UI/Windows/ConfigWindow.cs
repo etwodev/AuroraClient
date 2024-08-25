@@ -7,11 +7,11 @@ namespace Aurora.UI.Windows;
 
 internal class ConfigWindow : Window
 {
-  private readonly ConfigurationService configService;
+  private readonly ConfigurationService _configService;
 
   public ConfigWindow(ConfigurationService configService) : base($"{Plugin.Name} Config Window [{configService.Version}]###{WindowCode.ConfigWindow}", ImGuiWindowFlags.NoScrollbar | ImGuiWindowFlags.AlwaysAutoResize)
   {
-    this.configService = configService;
+    _configService = configService;
 
     SizeConstraints = new WindowSizeConstraints
     {
@@ -24,13 +24,13 @@ internal class ConfigWindow : Window
 
   public override void Draw()
   {
-    ImGui.Text($"{Plugin.Name} running {configService.Version}");
+    ImGui.Text($"{Plugin.Name} running {_configService.Version}");
 
-    bool forceDebug = configService.Configuration.Developer.ForceDebug;
+    bool forceDebug = _configService.Configuration.Developer.ForceDebug;
     if (ImGui.Checkbox("Enable Debug Mode", ref forceDebug))
     {
-      configService.Configuration.Developer.ForceDebug = forceDebug;
-      configService.ApplyChange();
+      _configService.Configuration.Developer.ForceDebug = forceDebug;
+      _configService.ApplyChange();
     }
   }
 }

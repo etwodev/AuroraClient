@@ -7,11 +7,11 @@ namespace Aurora.UI.Windows;
 
 internal class MainWindow : Window
 {
-  private readonly ConfigurationService configService;
+  private readonly ConfigurationService _configService;
 
   public MainWindow(ConfigurationService configService) : base($"{Plugin.Name} Main Window [{configService.Version}]###{WindowCode.MainWindow}", ImGuiWindowFlags.NoScrollbar | ImGuiWindowFlags.AlwaysAutoResize)
   {
-    this.configService = configService;
+    _configService = configService;
 
     SizeConstraints = new WindowSizeConstraints
     {
@@ -24,7 +24,7 @@ internal class MainWindow : Window
 
   public override void Draw()
   {
-    ImGui.Text($"{Plugin.Name} running {configService.Version}");
+    ImGui.Text($"{Plugin.Name} running {_configService.Version}");
 
     if (ImGui.Button("Show Boilerplate Settings"))
     {

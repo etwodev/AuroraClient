@@ -14,21 +14,21 @@ internal class ConfigurationService : IDisposable
   public event OnChangeDelegate? OnChange;
   public delegate void OnChangeDelegate();
 
-  private readonly IDalamudPluginInterface pluginInterface;
+  private readonly IDalamudPluginInterface _pluginInterface;
 
   public ConfigurationService(IDalamudPluginInterface pluginInterface)
   {
     if (Instance == null) Instance = this;
 
-    this.pluginInterface = pluginInterface;
-    Configuration = this.pluginInterface.GetPluginConfig() as Configuration ?? new Configuration();
+    _pluginInterface = pluginInterface;
+    Configuration = this._pluginInterface.GetPluginConfig() as Configuration ?? new Configuration();
   }
 
   /// <summary>
   /// This method saves the service configuration to storage.
   /// <para>NOTE: This method should not be called outside of the service.</para>
   /// </summary>
-  private void Save() => this.pluginInterface.SavePluginConfig(Configuration);
+  private void Save() => this._pluginInterface.SavePluginConfig(Configuration);
 
   public void Dispose() => Save();
 
@@ -56,12 +56,12 @@ internal class ConfigurationService : IDisposable
   }
 
 #if DEBUG
-  private static bool isDebug => true;
+  private static bool s_isDebug => true;
 #else
-  private static bool isDebug => false;
+  private static bool s_isDebug => false;
 #endif
 
-  private static readonly string version = typeof(Plugin).Assembly.GetName().Version?.ToString() ?? "(Unknown Version)";
-  public bool IsDebug => isDebug || Configuration.Developer.ForceDebug;
-  public string Version => IsDebug ? "(Debug)" : $"v{version}";
+  private static readonly string s_version = typeof(Plugin).Assembly.GetName().Version?.ToString() ?? "(Unknown Version)";
+  public bool IsDebug => s_isDebug || Configuration.Developer.ForceDebug;
+  public string Version => IsDebug ? "(Debug)" : $"v{s_version}";
 }
