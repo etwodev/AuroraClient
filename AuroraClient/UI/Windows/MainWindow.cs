@@ -1,15 +1,15 @@
 using System.Numerics;
 using Aurora.Config;
-using Dalamud.Interface.Windowing;
 using ImGuiNET;
+using Microsoft.Extensions.Logging;
 
 namespace Aurora.UI.Windows;
 
-internal class MainWindow : Window
+internal class MainWindow : WindowFactory
 {
   private readonly ConfigurationService _configService;
 
-  public MainWindow(ConfigurationService configService) : base($"{Plugin.Name} Main Window [{configService.Version}]###{WindowCode.MainWindow}", ImGuiWindowFlags.NoScrollbar | ImGuiWindowFlags.AlwaysAutoResize)
+  public MainWindow(ILogger<MainWindow> logger, ConfigurationService configService) : base(logger, $"{Plugin.Name} Main Window", WindowCode.MainWindow)
   {
     _configService = configService;
 
@@ -18,11 +18,9 @@ internal class MainWindow : Window
       MaximumSize = new Vector2(500, 5000),
       MinimumSize = new Vector2(500, 200)
     };
-
-    StateManager.Instance.AddWindow(this);
   }
 
-  public override void Draw()
+  protected override void DrawInternal()
   {
     ImGui.Text($"{Plugin.Name} running {_configService.Version}");
 

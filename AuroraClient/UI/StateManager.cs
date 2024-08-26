@@ -2,6 +2,7 @@ using Aurora.Config;
 using Aurora.UI.Windows;
 using Dalamud.Interface.Windowing;
 using Dalamud.Plugin;
+using Microsoft.Extensions.Hosting;
 
 namespace Aurora.UI;
 
@@ -19,44 +20,42 @@ internal class StateManager : IDisposable
     _pluginInterface = pluginInterface;
 
     _pluginInterface.UiBuilder.Draw += _windowSystem.Draw;
-    _pluginInterface.UiBuilder.OpenConfigUi += ShowWindowAction(WindowCode.ConfigWindow);
-    _pluginInterface.UiBuilder.OpenMainUi += ShowWindowAction(WindowCode.MainWindow);
+    _pluginInterface.UiBuilder.OpenConfigUi += ToggleWindowAction(WindowCode.ConfigWindow);
+    _pluginInterface.UiBuilder.OpenMainUi += ToggleWindowAction(WindowCode.MainWindow);
   }
 
   public void Dispose()
   {
     _pluginInterface.UiBuilder.Draw -= _windowSystem.Draw;
-    _pluginInterface.UiBuilder.OpenConfigUi -= ShowWindowAction(WindowCode.ConfigWindow);
-    _pluginInterface.UiBuilder.OpenMainUi -= ShowWindowAction(WindowCode.MainWindow);
+    _pluginInterface.UiBuilder.OpenConfigUi -= ToggleWindowAction(WindowCode.ConfigWindow);
+    _pluginInterface.UiBuilder.OpenMainUi -= ToggleWindowAction(WindowCode.MainWindow);
 
     _windowSystem.RemoveAllWindows();
 
     Instance = null!;
   }
 
-  private Action ShowWindowAction(WindowCode id) => () => ShowWindow(id);
+  private Action ToggleWindowAction(WindowCode code) => () => ToggleWindow(code);
+  public void ToggleWindow(WindowCode code) => GetWindow(code)?.Toggle();
 
-  public void ShowWindow(WindowCode id)
+  public void ShowWindow(WindowCode code)
+  {
+    var window = GetWindow(code);
+    if (window != null) window.IsOpen = true;
+  }
+
+  public Window? GetWindow(WindowCode code)
   {
     foreach (var window in _windowSystem.Windows)
     {
-      if (window.WindowName.EndsWith(id.ToString()))
+      if (window.WindowName.EndsWith($"###aurora_window_{code}"))
       {
-        window.IsOpen = true;
-      }
+        return window;
+      };
     }
+    return null;
   }
 
-  public void ToggleWindow(WindowCode id)
-  {
-    foreach (var window in _windowSystem.Windows)
-    {
-      if (window.WindowName.EndsWith(id.ToString()))
-      {
-        window.Toggle();
-      }
-    }
-  }
-
-  public void AddWindow(Window window) => _windowSystem.AddWindow(window);
+  public void AddWindow(WindowFactory window) => _windowSystem.AddWindow(window);
+  public void RemoveWindow(WindowFactory window) => _windowSystem.RemoveWindow(window);
 }

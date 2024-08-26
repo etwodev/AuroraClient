@@ -1,4 +1,5 @@
 using Dalamud.Plugin;
+using Microsoft.Extensions.Logging;
 
 namespace Aurora.Config;
 
@@ -63,5 +64,7 @@ internal class ConfigurationService : IDisposable
 
   private static readonly string s_version = typeof(Plugin).Assembly.GetName().Version?.ToString() ?? "(Unknown Version)";
   public bool IsDebug => s_isDebug || Configuration.Developer.ForceDebug;
+
+  public LogLevel LogLevel => IsDebug ? Configuration.Developer.LogLevel : LogLevel.Information;
   public string Version => IsDebug ? "(Debug)" : $"v{s_version}";
 }
